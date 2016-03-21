@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="description" content="WebRTC code samples">
+<meta name="viewport"
+	content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta id="theme-color" name="theme-color" content="#ffffff">
+
+<title>Munge SDP</title>
+
+<link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
+<link rel="stylesheet" href="../../../css/main.css">
+<link rel="stylesheet" href="css/main.css" />
+
+</head>
+
+<body>
+
+	<div id="container">
+
+		<div>
+			<h2>Remote video</h2>
+			<video id="remote"autoplay muted></video>
+		</div>
+
+
+		<div>
+			<h2>Copy Offer from transmitter window and paste it here</h2>
+			<textarea id="offer"></textarea>
+			<h2>Copy ICE candidates from transmitter window and paste it here</h2>
+			<textarea id="transmitterCandidates"></textarea>
+			<button id="acceptOffer">Accept Offer and ICE Candidates and create Answer</button>
+		</div>
+
+		<div>
+			<h2>Copy Answer and paste it on transmitter window</h2>
+			<textarea id="answer"></textarea>
+			<h2>Copy ICE Candidates and paste it on transmitter window</h2>
+			<textarea id="receiverCandidates"></textarea>
+		</div>
+
+	</div>
+
+
+	<script src="../../../js/adapter.js"></script>
+	<script src="js/commons.js"></script>
+	<script src="js/receiver.js"></script>
+
+</body>
+</html>

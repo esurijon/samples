@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="description" content="WebRTC code samples">
+<meta name="viewport"
+	content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta id="theme-color" name="theme-color" content="#ffffff">
+
+<title>Munge SDP</title>
+
+<link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
+<link rel="stylesheet" href="../../../css/main.css">
+<link rel="stylesheet" href="css/main.css" />
+
+</head>
+
+<body>
+
+	<div id="container">
+
+		<div>
+			<h2>Preview</h2>
+			<video id="preview"autoplay muted></video>
+			<button id="hangup">Hang up</button>
+		</div>
+
+
+		<div>
+			<h2>Copy Offer and paste it on calle window</h2>
+			<textarea id="offer"></textarea>
+			<h2>Copy ICE Candidates and paste it on receiver window</h2>
+			<textarea id="transmitterCandidates"></textarea>
+			<h3>ICE Candidates are created after calling PeerConnection.setLocalDescription()</h3>
+		</div>
+
+		<div>
+			<h2>Paste Answer from receiver window</h2>
+			<textarea id="answer"></textarea>
+			<h2>Paste ICE Candidates from receiver window</h2>
+			<textarea id="receiverCandidates"></textarea>
+			<button id="setAnswer">Accept Answer And ICE Candidates from receiver</button>
+		</div>
+
+	</div>
+
+
+	<script src="../../../js/adapter.js"></script>
+	<script src="js/commons.js"></script>
+	<script src="js/transmitter.js"></script>
+
+</body>
+</html>
