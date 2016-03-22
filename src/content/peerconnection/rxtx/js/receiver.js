@@ -10,10 +10,14 @@
 
 document.querySelector('button#acceptOffer').onclick = accpetOffer;
 
-var transmitterCandidatesTextarea  = document.querySelector('#transmitterCandidates');
-var receiverCandidatesTextarea  = document.querySelector('#receiverCandidates');
-var offerSdpTextarea = document.querySelector('#offer');
-var answerSdpTextarea = document.querySelector('#answer');
+var transmitterDataTextarea  = document.querySelector('#transmitterData');
+
+var receiverData = {
+		sdp: null,
+		candidates: []
+	};
+var receiverDataTextarea  = document.querySelector('#receiverData');
+
 var remoteVideo = document.querySelector('#remote');
 
 var servers = {
@@ -26,10 +30,10 @@ receiverPeerConnection.onicecandidate = receiverIceCallback;
 receiverPeerConnection.onaddstream = gotTransmitterStream;
 
 function accpetOffer() {
-  var sdp = maybeAddLineBreakToEnd(offerSdpTextarea.value).replace(/\n/g, '\r\n');
+  var transmitterData = JSON.parse(transmitterDataTextarea.value);	
   var offer = new RTCSessionDescription({
 	  type: 'offer',
-	  sdp: sdp});
+	  sdp: transmitterData.sdp});
 
   receiverPeerConnection.setRemoteDescription(
 	  offer,
@@ -39,10 +43,9 @@ function accpetOffer() {
   receiverPeerConnection.createAnswer(gotReceiverDescription, errorCallback);
 
   // check if transmitter candidates must be set up in setRemoteDescription callback
-  var transmitterCandidates = parseCandidates(transmitterCandidatesTextarea);
-  for (var i = 0; i < transmitterCandidates.length; i++) {
+  for (var i = 0; i < transmitterData.candidates.length; i++) {
     receiverPeerConnection.addIceCandidate(
-   		new RTCIceCandidate(transmitterCandidates[i]), 
+   		new RTCIceCandidate(transmitterData.candidates[i]), 
 		successCallback, 
 		errorCallback
 	);
@@ -51,7 +54,8 @@ function accpetOffer() {
 }
 
 function gotReceiverDescription(answer) {
-  answerSdpTextarea.value = answer.sdp;
+  receiverData.sdp = answer.sdp;
+  receiverDataTextarea.value = JSON.stringify(receiverData);
   receiverPeerConnection.setLocalDescription(answer, successCallback, errorCallback);
 }
 
@@ -61,6 +65,7 @@ function gotTransmitterStream(e) {
 
 function receiverIceCallback(event) {
 	if (event.candidate) {
-		receiverCandidatesTextarea.value = receiverCandidatesTextarea.value + JSON.stringify(event.candidate) + '\n';
+		receiverData.candidates.push(event.candidate)
+		receiverDataTextarea.value = JSON.stringify(receiverData);
 	}
 }

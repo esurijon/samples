@@ -10,15 +10,17 @@
 
 document.querySelector('button#hangup').onclick = hangup;
 document.querySelector('button#setAnswer').onclick = setAnswer;
+var videoElement = document.querySelector('#preview');
+var transmitterDataTextarea  = document.querySelector('#transmitterData');
+var receiverDataTextarea  = document.querySelector('#receiverData');
 
 var videoStream;
-var videoElement = document.querySelector('#preview');
 var transmitterPeerConnection;
 
-var transmitterCandidatesTextarea  = document.querySelector('#transmitterCandidates');
-var receiverCandidatesTextarea  = document.querySelector('#receiverCandidates');
-var offerSdpTextarea  = document.querySelector('#offer');
-var answerSdpTextarea = document.querySelector('#answer');
+var transmitterData = {
+	sdp: null,
+	candidates: []
+};
 
 navigator.getUserMedia(
 	{ audio: false, video: true },
@@ -46,24 +48,25 @@ var servers = {
 
 
 function gotTransmitterDescription(offer) {
-  offerSdpTextarea.value = offer.sdp;
+  transmitterData.sdp = offer.sdp;
+  transmitterDataTextarea.value = JSON.stringify(transmitterData);
   transmitterPeerConnection.setLocalDescription(offer, successCallback, errorCallback);
 }
 
 function setAnswer() {
-  var sdp = maybeAddLineBreakToEnd(answerSdpTextarea.value).replace(/\n/g, '\r\n');
+  var receiverData = JSON.parse(receiverDataTextarea.value);	
+  console.log(receiverData);
   var answer = new RTCSessionDescription({
 	  type: 'answer',
-	  sdp: sdp});
+	  sdp: receiverData.sdp});
   transmitterPeerConnection.setRemoteDescription(answer,
       successCallback,
       errorCallback);
 
   // check if receiver candidates must be set up in setRemoteDescription callback
-  var receiverCandidates = parseCandidates(receiverCandidatesTextarea);
-  for (var i = 0; i < receiverCandidates.length; i++) {
+  for (var i = 0; i < receiverData.candidates.length; i++) {
     transmitterPeerConnection.addIceCandidate(
-   		new RTCIceCandidate(receiverCandidates[i]), 
+   		new RTCIceCandidate(receiverData.candidates[i]), 
 		successCallback, 
 		errorCallback
 	);
@@ -72,7 +75,8 @@ function setAnswer() {
 
 function transmitterIceCallback(event) {
 	if (event.candidate) {
-		transmitterCandidatesTextarea.value = transmitterCandidatesTextarea.value + JSON.stringify(event.candidate) + '\n';
+		transmitterData.candidates.push(event.candidate);
+		transmitterDataTextarea.value = JSON.stringify(transmitterData);
 	}
 }
 
