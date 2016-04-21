@@ -33,7 +33,7 @@ function onVideoStream(stream) {
   videoStream = stream;
 
 var servers = {
-	iceServers : [{ url: 'stun:stun.l.google.com:19302'}]	  
+	iceServers : [{ urls: 'stun:stun.l.google.com:19302'}]	  
 };
 //var servers = null;
 
@@ -43,7 +43,7 @@ var servers = {
   transmitterPeerConnection.createOffer(
 	gotTransmitterDescription, 
 	errorCallback, 
-	{ offerToReceiveAudio: 0, offerToReceiveVideo: 1 });
+	{ mandatory: { OfferToReceiveAudio: false, OfferToReceiveVideo: true }});
 }
 
 

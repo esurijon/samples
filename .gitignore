@@ -1,6 +1,11 @@
-browsers*
-firefox-*.tar.bz2
-node_modules
-.DS_Store
-validation-report.json
-validation-status.json
+aulatec.mv.db
+aulatec.trace.db
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+/bin/

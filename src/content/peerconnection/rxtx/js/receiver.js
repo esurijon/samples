@@ -21,7 +21,7 @@ var receiverDataTextarea  = document.querySelector('#receiverData');
 var remoteVideo = document.querySelector('#remote');
 
 var servers = {
-  iceServers : [{ url: 'stun:stun.l.google.com:19302'}]	  
+  iceServers : [{ urls: 'stun:stun.l.google.com:19302'}]	  
 };
 //var servers = null;
 
@@ -40,7 +40,10 @@ function accpetOffer() {
       successCallback,
       errorCallback);
 
-  receiverPeerConnection.createAnswer(gotReceiverDescription, errorCallback);
+  receiverPeerConnection.createAnswer(
+	gotReceiverDescription, 
+	errorCallback,
+	{ mandatory: { OfferToReceiveAudio: false, OfferToReceiveVideo: true }});
 
   // check if transmitter candidates must be set up in setRemoteDescription callback
   for (var i = 0; i < transmitterData.candidates.length; i++) {
