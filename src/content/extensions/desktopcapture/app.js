@@ -18,12 +18,12 @@ document.getElementById('start').addEventListener('click', function() {
 
 // listen for messages from the content-script
 window.addEventListener('message', function(event) {
-  if (event.origin !== window.location.origin) {
-    return;
-  }
+//  if (event.origin !== window.location.origin) {
+//    return;
+//  }
 
   // content-script will send a 'SS_PING' msg if extension is installed
-  if (event.data.type && (event.data.type === 'SS_PING')) {
+  if (event.data.type && (event.data.type == 'SS_PING')) {
     extensionInstalled = true;
   }
 
@@ -38,8 +38,25 @@ window.addEventListener('message', function(event) {
   }
 });
 
+function onVideoStream(screenStream) {
+    var videoElement = document.getElementById('video');
+    alert(videoElement);
+    videoElement.srcObject = stream;
+//    videoElement.src = URL.createObjectURL(screenStream);
+//    videoElement.play();
+}
+
+function errorCallback(err) {
+    console.log('getUserMedia failed!: ' + err);
+}
+
+navigator.getUserMedia(
+		{ audio: false, video: true },
+		onVideoStream, 
+		errorCallback);
+
 function startScreenStreamFrom(streamId) {
-  navigator.webkitGetUserMedia({
+	navigator.webkitGetUserMedia({
     audio: false,
     video: {
       mandatory: {
@@ -50,14 +67,6 @@ function startScreenStreamFrom(streamId) {
       }
     }
   },
-  // successCallback
-  function(screenStream) {
-    var videoElement = document.getElementById('video');
-    videoElement.src = URL.createObjectURL(screenStream);
-    videoElement.play();
-  },
-  // errorCallback
-  function(err) {
-    console.log('getUserMedia failed!: ' + err);
-  });
+  onVideoStream,
+  errorCallback);
 }
